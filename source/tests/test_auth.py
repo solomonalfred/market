@@ -7,7 +7,6 @@ async def test_ping(async_client):
     assert response.status_code == 200
     assert response.json() == {"res": "hi"}
 
-
 @pytest.mark.asyncio
 async def test_registration_and_token(async_client):
     registration_payload = {
