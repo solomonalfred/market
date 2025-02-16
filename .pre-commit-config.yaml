@@ -1,15 +1,4 @@
 repos:
-  - repo: local
-    hooks:
-      - id: autoflake
-        name: autoflake
-        entry: autoflake
-        language: python
-        additional_dependencies: [ "autoflake" ]
-        types: [ python ]
-        args: [ "--in-place", "--remove-all-unused-imports", "--remove-duplicate-keys" ]
-
-
 #  - repo: https://github.com/psf/black
 #    rev: 25.1.0
 #    hooks:
@@ -27,4 +16,4 @@ repos:
         entry: autoflake
         language: system
         types: [python]
-        args: ["--in-place", "--remove-all-unused-imports", "--remove-duplicate-keys"]
+        args: ["--in-place", "--remove-duplicate-keys"]
