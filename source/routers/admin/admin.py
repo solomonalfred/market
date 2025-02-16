@@ -87,10 +87,11 @@ async def delete_user(current_user: Annotated[User, Depends(get_current_user)],
             detail="Внутренняя ошибка сервера."
         )
     if result:
-        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST,
-                            content={"description": "Пользователь уже не существует."})
-    return JSONResponse(status_code=status.HTTP_200_OK,
-                        content={"description": "Успешный ответ."})
+        return JSONResponse(status_code=status.HTTP_200_OK,
+                            content={"description": "Успешный ответ."})
+    return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST,
+                        content={"description": "Пользователь уже не существует."})
+
 
 @router.post(
     path=Endpoints.UPDATE_USER,
@@ -112,7 +113,8 @@ async def update_user_info(current_user: Annotated[User, Depends(get_current_use
             detail="Внутренняя ошибка сервера."
         )
     if result:
-        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST,
-                            content={"description": "Пользователь не существует."})
-    return JSONResponse(status_code=status.HTTP_200_OK,
-                        content={"description": "Успешный ответ."})
+        return JSONResponse(status_code=status.HTTP_200_OK,
+                            content={"description": "Успешный ответ."})
+
+    return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST,
+                        content={"description": "Пользователь не существует."})
