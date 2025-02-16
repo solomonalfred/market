@@ -170,3 +170,5 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 /alembic_bulid.txt
+/ssh_hba
+/ssh_hba.pub

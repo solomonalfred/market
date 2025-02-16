@@ -1,13 +1,14 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from functools import lru_cache
+
 from dotenv import load_dotenv
 from pydantic import (
-    field_validator,
-    FieldValidationInfo,
     EmailStr,
+    FieldValidationInfo,
     PostgresDsn,
     SecretStr,
+    field_validator,
 )
-from functools import lru_cache
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -48,9 +49,11 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env")
 
+
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
+
 
 if __name__ == "__main__":
     settings = get_settings()

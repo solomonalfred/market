@@ -1,9 +1,8 @@
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker, Session
-from typing_extensions import AsyncGenerator
 import sqlalchemy as sql
-from contextlib import asynccontextmanager
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import Session, sessionmaker
+from typing_extensions import AsyncGenerator
 
 from source.config import get_settings
 
@@ -13,9 +12,9 @@ class SessionManager:
         settings = get_settings()
         self.async_engine = create_async_engine(url=settings.DB_URI, echo=False)
 
-        self.async_session = sessionmaker(self.async_engine,
-                                          expire_on_commit=False,
-                                          class_=AsyncSession)
+        self.async_session = sessionmaker(
+            self.async_engine, expire_on_commit=False, class_=AsyncSession
+        )
 
     def __new__(cls):
         if not hasattr(cls, "instance"):
@@ -27,7 +26,9 @@ class SessionManager:
 
     async def get_table_names(self):
         async with self.async_engine.connect() as conn:
-            tables = await conn.run_sync(lambda sync_conn: sql.inspect(sync_conn).get_table_name())
+            tables = await conn.run_sync(
+                lambda sync_conn: sql.inspect(sync_conn).get_table_name()
+            )
             return tables
 
 

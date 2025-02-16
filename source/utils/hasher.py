@@ -12,6 +12,7 @@ class PasswordManager:
     def verify_password(self, password, hashed_password) -> bool:
         return self.pwd_context.verify(password, hashed_password)
 
+
 # if __name__ == '__main__':
 #     hasher = PasswordManager()
 #     hash_ = hasher.hash_password('12345')

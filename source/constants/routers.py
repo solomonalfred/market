@@ -7,6 +7,7 @@ class RouterInfo(StrEnum):
     user_tags = "user"
     admin_tags = "admin"
 
+
 class Endpoints(StrEnum):
     SIGNUP = "/signup"
     TOKEN = "/auth"

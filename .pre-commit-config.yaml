@@ -1,0 +1,30 @@
+repos:
+  - repo: local
+    hooks:
+      - id: autoflake
+        name: autoflake
+        entry: autoflake
+        language: python
+        additional_dependencies: [ "autoflake" ]
+        types: [ python ]
+        args: [ "--in-place", "--remove-all-unused-imports", "--remove-duplicate-keys" ]
+
+
+#  - repo: https://github.com/psf/black
+#    rev: 25.1.0
+#    hooks:
+#      - id: black
+
+#  - repo: https://github.com/PyCQA/isort
+#    rev: 6.0.0
+#    hooks:
+#      - id: isort
+
+  - repo: local
+    hooks:
+      - id: autoflake
+        name: autoflake
+        entry: autoflake
+        language: system
+        types: [python]
+        args: ["--in-place", "--remove-all-unused-imports", "--remove-duplicate-keys"]

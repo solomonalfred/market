@@ -1,22 +1,17 @@
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt, ExpiredSignatureError
-from typing import Annotated, Dict, Any, Optional
-from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
+from typing import Annotated, Any, Dict, Optional
+
 from fastapi import Depends
+from fastapi.security import OAuth2PasswordBearer
+from jose import ExpiredSignatureError, JWTError, jwt
 from jose.exceptions import JWTClaimsError
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from source.config import get_settings
-from source.utils import PasswordManager
-from source.db import (
-    find_user_by_login,
-    get_async_session,
-    User
-)
+from source.db import User, find_user_by_login, get_async_session
 from source.routers.auth.exception import credentials_exception
 from source.routers.shemas.auth import Credentials, Token
-
-
+from source.utils import PasswordManager
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth")
 hashed = PasswordManager()
@@ -32,29 +27,41 @@ async def authenticate_user(user_data: Credentials, db: AsyncSession) -> Optiona
         return None
     return user
 
-async def generate_token(data: Dict[str, Any], expires_delta: timedelta = None) -> Token:
+
+async def generate_token(
+    data: Dict[str, Any], expires_delta: timedelta = None
+) -> Token:
     access_to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.utcnow() + timedelta(
+            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+        )
     access_to_encode.update({"exp": expire})
-    access_token = jwt.encode(access_to_encode,
-                              settings.SECRET_KEY.get_secret_value(),
-                              algorithm=settings.ALGORITHM)
+    access_token = jwt.encode(
+        access_to_encode,
+        settings.SECRET_KEY.get_secret_value(),
+        algorithm=settings.ALGORITHM,
+    )
     return Token(access_token=access_token)
+
 
 async def decode_token(token: str) -> Optional[Dict[str, Any]]:
     try:
-        payload = jwt.decode(token,
-                             settings.SECRET_KEY.get_secret_value(),
-                             algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(
+            token,
+            settings.SECRET_KEY.get_secret_value(),
+            algorithms=[settings.ALGORITHM],
+        )
         return payload
     except (JWTError, ExpiredSignatureError, JWTClaimsError):
         return None
 
+
 async def get_current_user(
-    token: Annotated[str, Depends(oauth2_scheme)], db: AsyncSession = Depends(get_async_session)
+    token: Annotated[str, Depends(oauth2_scheme)],
+    db: AsyncSession = Depends(get_async_session),
 ):
     payload = await decode_token(token)
     if payload is None:
