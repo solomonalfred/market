@@ -59,3 +59,7 @@ def get_application():
     return app
 
 app = get_application()
+
+@app.get("/ping")
+async def ping():
+    return {'res': "hi"}

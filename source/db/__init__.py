@@ -1,4 +1,4 @@
-from .engine import get_async_session
+from .engine import get_async_session, SessionManager
 from .role_types import RoleType
 from .user_methods import (
     find_user_by_login,

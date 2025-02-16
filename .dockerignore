@@ -1,0 +1,5 @@
+.gitignore
+.idea
+README.md
+source/docs
+main.py

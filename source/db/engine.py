@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, Session
 from typing_extensions import AsyncGenerator
 import sqlalchemy as sql
+from contextlib import asynccontextmanager
 
 from source.config import get_settings
 
@@ -28,6 +29,7 @@ class SessionManager:
         async with self.async_engine.connect() as conn:
             tables = await conn.run_sync(lambda sync_conn: sql.inspect(sync_conn).get_table_name())
             return tables
+
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async_session = SessionManager().get_session()
