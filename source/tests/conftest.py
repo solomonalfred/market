@@ -11,6 +11,9 @@ from httpx import ASGITransport, AsyncClient
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from source.app import app
 from source.config import Settings, get_settings
+from source.db.role_types import RoleType
+from source.routers.auth.services import get_current_user
+
 
 TEST_DB_NAME = "test_market"
 
@@ -42,6 +45,7 @@ async def setup_test_db():
     ALEMBIC_INI_PATH = os.path.join(BASE_DIR, "alembic.ini")
     alembic_cfg = Config(str(ALEMBIC_INI_PATH))
     alembic_cfg.set_main_option("script_location", "source/db/migrations")
+    # alembic_cfg.set_main_option("script_location", "../db/migrations")
     alembic_cfg.set_main_option("sqlalchemy.url", test_db_uri)
     command.upgrade(alembic_cfg, "head")
 
@@ -61,7 +65,6 @@ async def setup_test_db():
 
 @pytest_asyncio.fixture(autouse=True)
 async def clean_tables():
-    # Очищаем таблицы в начале каждого теста
     settings = get_settings()
     fixed_db_uri = settings.DB_URI.replace("postgresql+asyncpg", "postgresql")
     test_db_uri = fixed_db_uri.replace(settings.DB_NAME, TEST_DB_NAME)
@@ -77,10 +80,28 @@ async def clean_tables():
     yield
 
 
+# class FakeUser:
+#     def __init__(self, login: str, role: str, coin_amount: int = 100):
+#         self.login = login
+#         self.role = role
+#         self.coin_amount = coin_amount
+#
+# admin_user = FakeUser("admin", RoleType.admin, coin_amount=200)
+# regular_user = FakeUser("user", RoleType.user, coin_amount=100)
+#
+#
 @pytest.fixture
 def application():
     app.dependency_overrides[get_settings] = override_get_settings
     return app
+
+
+# @pytest.fixture(scope="session")
+# def event_loop():
+#     policy = asyncio.get_event_loop_policy()
+#     loop = policy.new_event_loop()
+#     yield loop
+#     loop.close()
 
 
 @pytest_asyncio.fixture

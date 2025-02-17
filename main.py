@@ -1,7 +1,5 @@
 import asyncio
-
 from uvicorn import Config, Server
-
 from source import app
 
 if __name__ == "__main__":
