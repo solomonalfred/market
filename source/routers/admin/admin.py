@@ -1,5 +1,4 @@
 from typing import Annotated, Any
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -44,9 +43,7 @@ async def add_user(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Внутренняя ошибка сервера.",
         )
-    return JSONResponse(
-        status_code=status.HTTP_200_OK, content={"description": "Успешный ответ."}
-    )
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"description": "Успешный ответ."})
 
 
 @router.put(
@@ -77,9 +74,7 @@ async def add_merch_item(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"description": "Товар уже существует."},
         )
-    return JSONResponse(
-        status_code=status.HTTP_200_OK, content={"description": "Успешный ответ."}
-    )
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"description": "Успешный ответ."})
 
 
 @router.delete(
@@ -106,9 +101,7 @@ async def delete_user(
             detail="Внутренняя ошибка сервера.",
         )
     if result:
-        return JSONResponse(
-            status_code=status.HTTP_200_OK, content={"description": "Успешный ответ."}
-        )
+        return JSONResponse(status_code=status.HTTP_200_OK, content={"description": "Успешный ответ."})
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={"description": "Пользователь уже не существует."},
@@ -139,9 +132,7 @@ async def update_user_info(
             detail="Внутренняя ошибка сервера.",
         )
     if result:
-        return JSONResponse(
-            status_code=status.HTTP_200_OK, content={"description": "Успешный ответ."}
-        )
+        return JSONResponse(status_code=status.HTTP_200_OK, content={"description": "Успешный ответ."})
 
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,

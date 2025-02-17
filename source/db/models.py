@@ -42,12 +42,8 @@ class User(Base):
     role: Annotated[str, 64] = Column(String(64), nullable=False, default=RoleType.user)
     coin_amount: int = Column(Integer, nullable=False, default=0, server_default="0")
 
-    sent_transactions = relationship(
-        "Transaction", foreign_keys="[Transaction.from_user]"
-    )
-    received_transactions = relationship(
-        "Transaction", foreign_keys="[Transaction.to_user]"
-    )
+    sent_transactions = relationship("Transaction", foreign_keys="[Transaction.from_user]")
+    received_transactions = relationship("Transaction", foreign_keys="[Transaction.to_user]")
     purchases = relationship("Purchase", back_populates="user")
 
 

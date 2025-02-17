@@ -57,9 +57,7 @@ async def send_coin(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"description": "Недостаточно средств."},
         )
-    return JSONResponse(
-        status_code=status.HTTP_200_OK, content={"description": "Успешный ответ."}
-    )
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"description": "Успешный ответ."})
 
 
 @router.get(
@@ -81,9 +79,7 @@ async def buy(
             detail="Внутренняя ошибка сервера.",
         )
     if result:
-        return JSONResponse(
-            status_code=status.HTTP_200_OK, content={"description": "Успешный ответ."}
-        )
+        return JSONResponse(status_code=status.HTTP_200_OK, content={"description": "Успешный ответ."})
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={"description": "Недостаточно средств."},

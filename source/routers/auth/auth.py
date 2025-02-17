@@ -19,9 +19,7 @@ router = APIRouter(prefix=RouterInfo.prefix, tags=[RouterInfo.auth_tags])
     status_code=status.HTTP_200_OK,
     summary="Registration user",
 )
-async def registration(
-    user_data: Registration, db: AsyncSession = Depends(get_async_session)
-) -> Any:
+async def registration(user_data: Registration, db: AsyncSession = Depends(get_async_session)) -> Any:
     try:
         user = await find_user_by_login(db, user_data.login)
     except Exception as e:
@@ -58,9 +56,7 @@ async def token(
     db: AsyncSession = Depends(get_async_session),
 ) -> Any:
     try:
-        user = await authenticate_user(
-            Credentials(login=user_data.username, password=user_data.password), db
-        )
+        user = await authenticate_user(Credentials(login=user_data.username, password=user_data.password), db)
         if not user:
             raise credentials_exception
         tokens = await generate_token({"data": user.login, "role": user.role})

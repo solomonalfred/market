@@ -25,7 +25,7 @@ headingLevel: 2
 
 # Authentication
 
-- oAuth2 authentication. 
+- oAuth2 authentication.
 
     - Flow: password
 
@@ -2268,4 +2268,3 @@ continued
 |---|---|---|---|---|
 |msg|string|true|none|none|
 |type|string|true|none|none|
-

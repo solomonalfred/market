@@ -28,16 +28,12 @@ async def authenticate_user(user_data: Credentials, db: AsyncSession) -> Optiona
     return user
 
 
-async def generate_token(
-    data: Dict[str, Any], expires_delta: timedelta = None
-) -> Token:
+async def generate_token(data: Dict[str, Any], expires_delta: timedelta = None) -> Token:
     access_to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(
-            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-        )
+        expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_to_encode.update({"exp": expire})
     access_token = jwt.encode(
         access_to_encode,

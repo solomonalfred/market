@@ -20,9 +20,7 @@ async def find_user_by_login(session: AsyncSession, login: str) -> Optional[User
     return user
 
 
-async def create_user(
-    session: AsyncSession, user_data: Registration | AdminUser
-) -> User:
+async def create_user(session: AsyncSession, user_data: Registration | AdminUser) -> User:
     hashed_password = hashed.hash_password(user_data.password)
     coins = 0
     if isinstance(user_data, AdminUser):
@@ -42,9 +40,7 @@ async def create_user(
     return new_user
 
 
-async def transfer_coins(
-    session: AsyncSession, sender: User, transaction: SendCoin
-) -> bool:
+async def transfer_coins(session: AsyncSession, sender: User, transaction: SendCoin) -> bool:
     receiver = await find_user_by_login(session, transaction.toUser)
     if not sender or not receiver:
         return False
@@ -52,9 +48,7 @@ async def transfer_coins(
         return False
     sender.coin_amount -= transaction.amount
     receiver.coin_amount += transaction.amount
-    transaction = Transaction(
-        from_user=sender.id, to_user=receiver.id, amount=transaction.amount
-    )
+    transaction = Transaction(from_user=sender.id, to_user=receiver.id, amount=transaction.amount)
     session.add(transaction)
     try:
         await session.commit()
@@ -64,9 +58,7 @@ async def transfer_coins(
         return False
 
 
-async def purchase_item(
-    session: AsyncSession, user: User, merch_name: ItemInfo
-) -> bool:
+async def purchase_item(session: AsyncSession, user: User, merch_name: ItemInfo) -> bool:
     result = await session.execute(select(Merch).where(Merch.name == merch_name.name))
     merch = result.scalars().one_or_none()
     if not merch:
@@ -150,19 +142,9 @@ async def delete_user_by_login(session: AsyncSession, login: str) -> bool:
     if not user:
         return False
     dummy_user = await get_dummy_user(session)
-    await session.execute(
-        update(Transaction)
-        .where(Transaction.from_user == user.id)
-        .values(from_user=dummy_user.id)
-    )
-    await session.execute(
-        update(Transaction)
-        .where(Transaction.to_user == user.id)
-        .values(to_user=dummy_user.id)
-    )
-    purchases_result = await session.execute(
-        select(Purchase).where(Purchase.user_id == user.id)
-    )
+    await session.execute(update(Transaction).where(Transaction.from_user == user.id).values(from_user=dummy_user.id))
+    await session.execute(update(Transaction).where(Transaction.to_user == user.id).values(to_user=dummy_user.id))
+    purchases_result = await session.execute(select(Purchase).where(Purchase.user_id == user.id))
     purchases = purchases_result.scalars().all()
     for purchase in purchases:
         await session.delete(purchase)

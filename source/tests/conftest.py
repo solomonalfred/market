@@ -38,9 +38,7 @@ async def setup_test_db():
     await conn.execute(f"CREATE DATABASE {TEST_DB_NAME}")
     await conn.close()
 
-    BASE_DIR = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "..")
-    )  # корень проекта
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))  # корень проекта
     ALEMBIC_INI_PATH = os.path.join(BASE_DIR, "alembic.ini")
     alembic_cfg = Config(str(ALEMBIC_INI_PATH))
     alembic_cfg.set_main_option("script_location", "source/db/migrations")
@@ -73,11 +71,7 @@ async def clean_tables():
     )
     table_names = [row["tablename"] for row in rows]
     if table_names:
-        query = (
-            "TRUNCATE TABLE "
-            + ", ".join([f'"{t}"' for t in table_names])
-            + " RESTART IDENTITY CASCADE;"
-        )
+        query = "TRUNCATE TABLE " + ", ".join([f'"{t}"' for t in table_names]) + " RESTART IDENTITY CASCADE;"
         await conn.execute(query)
     await conn.close()
     yield

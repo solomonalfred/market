@@ -23,16 +23,12 @@ async def get_db_session_cm():
 async def lifespan(app: FastAPI):
     settings = get_settings()
     async with get_db_session_cm() as db:
-        result = await db.execute(
-            select(User).where(User.login == settings.ADMIN_LOGIN)
-        )
+        result = await db.execute(select(User).where(User.login == settings.ADMIN_LOGIN))
         user = result.scalars().one_or_none()
         if user is None:
             new_user = User(
                 login=settings.ADMIN_LOGIN,
-                password_hash=hasher.hash_password(
-                    settings.ADMIN_PASSWORD.get_secret_value()
-                ),
+                password_hash=hasher.hash_password(settings.ADMIN_PASSWORD.get_secret_value()),
                 email=settings.ADMIN_EMAIL,
                 first_name=settings.ADMIN_LOGIN,
                 last_name=settings.ADMIN_LOGIN,
@@ -57,8 +53,6 @@ def get_application():
 
     for router in routers:
         app.include_router(router)
-
-    # await build()
 
     return app
 

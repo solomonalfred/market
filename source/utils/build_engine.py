@@ -46,12 +46,8 @@ class User(Base):
     role: Annotated[str, 64] = Column(String(64), nullable=False, default="user")
     coin_amount: int = Column(Integer, nullable=False, default=0, server_default="0")
 
-    sent_transactions = relationship(
-        "Transaction", foreign_keys="[Transaction.from_user]"
-    )
-    received_transactions = relationship(
-        "Transaction", foreign_keys="[Transaction.to_user]"
-    )
+    sent_transactions = relationship("Transaction", foreign_keys="[Transaction.from_user]")
+    received_transactions = relationship("Transaction", foreign_keys="[Transaction.to_user]")
     purchases = relationship("Purchase", back_populates="user")
 
 
@@ -96,9 +92,7 @@ class SessionManager:
         settings = get_settings()
         self.async_engine = create_async_engine(url=settings.DB_URI, echo=False)
 
-        self.async_session = sessionmaker(
-            self.async_engine, expire_on_commit=False, class_=AsyncSession
-        )
+        self.async_session = sessionmaker(self.async_engine, expire_on_commit=False, class_=AsyncSession)
 
     def __new__(cls):
         if not hasattr(cls, "instance"):
@@ -110,9 +104,7 @@ class SessionManager:
 
     async def get_table_names(self):
         async with self.async_engine.connect() as conn:
-            tables = await conn.run_sync(
-                lambda sync_conn: sql.inspect(sync_conn).get_table_name()
-            )
+            tables = await conn.run_sync(lambda sync_conn: sql.inspect(sync_conn).get_table_name())
             return tables
 
 
