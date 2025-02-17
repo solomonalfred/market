@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     DB_PASS: SecretStr
     DB_NAME: str
 
+    PORT: int
+
     CREATE_ADMIN: bool = True
     ADMIN_LOGIN: str
     ADMIN_PASSWORD: SecretStr

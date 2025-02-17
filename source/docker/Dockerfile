@@ -12,4 +12,4 @@ RUN pip install --upgrade pip && \
 
 COPY . .
 
-CMD alembic upgrade head && uvicorn source:app --host 0.0.0.0 --port 8080
+CMD alembic upgrade head && uvicorn source:app --host 0.0.0.0 --port ${PORT}

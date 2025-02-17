@@ -7,7 +7,7 @@ services:
       dockerfile: source/docker/Dockerfile
     container_name: app
     ports:
-      - "8080:8080"
+      - "${PORT}:${PORT}"
     env_file:
       - .env
     depends_on:
